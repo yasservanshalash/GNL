@@ -31,7 +31,7 @@ char	*get_next_line(int fd)
 	int			k;
 	int			read_chars;
 
-	line = calloc(100000000, sizeof(char));
+	line = calloc(10000000000, sizeof(char));
 	chunk = calloc(BUFFER_SIZE + 1, sizeof(char));
 	i = 0;
 	j = 0;
@@ -42,8 +42,11 @@ char	*get_next_line(int fd)
 	{
 		if (!strchr(leftover, '\n'))
 		{
+			free(line);
 			line = strdup(leftover);
 			i += strlen(leftover);
+			free(leftover);
+			leftover = NULL;
 		}
 		else
 		{
@@ -76,12 +79,7 @@ char	*get_next_line(int fd)
 				i++;
 				j++;
 			}
-			if (j < read_chars)
-			{
-				line[i] = '\n';
-				i++;
-				j++;
-			}
+
 			free(leftover);
 			leftover = strdup(chunk + j);
 			break ;
